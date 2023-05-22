@@ -15,7 +15,7 @@ Padding messageCell(Message message) {
                 message.userId.substring(0, 8),
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Color(StringToHex.toColor(message.userId))),
+                    color: Color(StringToHex.toColor(StringToHex.toHexString(message.userId)))),
               ),
               const SizedBox(width: 6),
               Text(
