@@ -1,5 +1,5 @@
+import 'package:chat_app/di/service_locator.dart';
 import 'package:flutter/material.dart';
-import '../../../services/database_service.dart';
 
 class MessageSender extends StatelessWidget{
   const MessageSender({super.key});
@@ -26,7 +26,7 @@ class MessageSender extends StatelessWidget{
           ),
           IconButton(
               onPressed: () {
-                DatabaseService().sendMessage(controller.text);
+                Dependencies.of(context).dbService.sendMessage(controller.text);
                 controller.text = "";
               },
               icon: const Icon(Icons.send))

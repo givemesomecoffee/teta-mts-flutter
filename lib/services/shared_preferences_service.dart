@@ -1,19 +1,25 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-class SharedPreferencesService{
-  final _uuid = 'uuid';
+class SharedPreferencesService {
+  SharedPreferencesService({required this.prefs});
 
-  Future<String?> getId() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final _uuid = 'uuid';
+  final SharedPreferences prefs;
+
+  Future<String?> getId() async {
     return prefs.getString(_uuid);
   }
 
-  Future initUserId() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future initUserId() async {
     final id = prefs.getString(_uuid);
-    if(id == null){
-      await prefs.setString(_uuid,const Uuid().v4());
+    if (id == null) {
+      await prefs.setString(_uuid, const Uuid().v4());
     }
+  }
+
+  static Future<SharedPreferencesService> getInstance() async {
+    return SharedPreferencesService(
+        prefs: await SharedPreferences.getInstance());
   }
 }

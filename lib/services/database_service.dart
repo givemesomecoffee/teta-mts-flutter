@@ -4,15 +4,21 @@ import 'package:chat_app/services/shared_preferences_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class DatabaseService {
+  DatabaseService({required this.prefs});
+
   final _messagesTable = 'messages';
+  final SharedPreferencesService prefs;
 
   Future sendMessage(text) async {
-    final id = await SharedPreferencesService().getId();
+    final id = await prefs.getId();
     DatabaseReference ref = FirebaseDatabase.instance.ref(_messagesTable);
     final message = Message(
         userId: id!,
         text: text,
-        timestamp: DateTime.now().millisecondsSinceEpoch.toString());
+        timestamp: DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString());
 
     final messageRef = ref.push();
     await messageRef.set(message.toJson());
