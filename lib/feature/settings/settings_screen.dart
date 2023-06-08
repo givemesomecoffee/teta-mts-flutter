@@ -20,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isLoading = true;
 
   @override
-  didChangeDependencies() {
+  void didChangeDependencies() {
     repository = Dependencies.of(context).dbService;
     super.didChangeDependencies();
     _loadUser();
@@ -51,20 +51,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  _toggleEditMode(bool isEdit) {
+  void _toggleEditMode(bool isEdit) {
     setState(() {
       _isEdit = isEdit;
     });
   }
 
-  _updateUserName(String text) async {
+  void _updateUserName(String text) async {
     repository.updateName(text);
     setState(() {
       _userName = text;
     });
   }
 
-  _loadUser() async {
+  void _loadUser() async {
     final user = await repository.getUser();
     setState(() {
       _userName = user?.displayName != null ? user!.displayName! : user!.userId;

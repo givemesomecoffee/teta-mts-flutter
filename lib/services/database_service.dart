@@ -19,7 +19,7 @@ class DatabaseService {
     final id = await prefs.getId();
     DatabaseReference ref = FirebaseDatabase.instance.ref(_messagesTable);
     final message = Message(
-        userId: id!,
+        userId: id,
         text: text,
         timestamp: DateTime.now().millisecondsSinceEpoch.toString());
 
@@ -57,7 +57,7 @@ class DatabaseService {
     final downLoadUrl = await ref.getDownloadURL();
     var id = await prefs.getId();
     final dbRef =
-        FirebaseDatabase.instance.ref(_usersTable).child(id!).child('photoUrl');
+        FirebaseDatabase.instance.ref(_usersTable).child(id).child('photoUrl');
     dbRef.set(downLoadUrl);
     return downLoadUrl;
   }
@@ -66,18 +66,16 @@ class DatabaseService {
     var id = await prefs.getId();
     final dbRef = FirebaseDatabase.instance
         .ref(_usersTable)
-        .child(id!)
+        .child(id)
         .child('displayName');
     dbRef.set(text);
   }
 
   Future saveNewUser() async {
-    var id = await prefs.getId();
-    if (id == null) {
-      prefs.initUserId();
-      id = await prefs.getId();
+    if (prefs.checkIfUserAuthorized()) {
+      final id = await prefs.getId();
       final dbRef = FirebaseDatabase.instance.ref(_usersTable);
-      final user = User(userId: id!, photoUrl: null, displayName: null);
+      final user = User(userId: id, photoUrl: null, displayName: null);
       final test = dbRef.child(id);
       test.set(user.toJson());
     }
@@ -85,7 +83,7 @@ class DatabaseService {
 
   Future<User?> getUser() async {
     var id = await prefs.getId();
-    final dbRef = FirebaseDatabase.instance.ref(_usersTable).child(id!);
+    final dbRef = FirebaseDatabase.instance.ref(_usersTable).child(id);
     final user = await dbRef.get();
     if (user.value != null) {
       final msg =
@@ -94,7 +92,7 @@ class DatabaseService {
       final current = User.fromMap(Map<String, dynamic>.from(msg));
       return current;
     }
-    return null;
+    return User(userId: id, photoUrl: null, displayName: null);
   }
 
   Stream<List<User>> trackUsers() {
