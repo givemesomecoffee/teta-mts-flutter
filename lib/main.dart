@@ -4,6 +4,7 @@ import 'package:chat_app/services/database_service.dart';
 import 'package:chat_app/services/shared_preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             useMaterial3: true,
             colorSchemeSeed: const Color(0xff6750a4),
+            textTheme:  GoogleFonts.alataTextTheme()
           ),
           home: const RootContainer(),
         ));
