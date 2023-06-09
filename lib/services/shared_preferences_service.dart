@@ -7,15 +7,19 @@ class SharedPreferencesService {
   final _uuid = 'uuid';
   final SharedPreferences prefs;
 
-  Future<String?> getId() async {
-    return prefs.getString(_uuid);
-  }
-
-  Future initUserId() async {
+  Future<String> getId() async {
     final id = prefs.getString(_uuid);
     if (id == null) {
-      await prefs.setString(_uuid, const Uuid().v4());
+      final newId = const Uuid().v4();
+      await prefs.setString(_uuid, newId);
+      return newId;
     }
+    return id;
+  }
+
+  bool checkIfUserAuthorized() {
+    final id = prefs.getString(_uuid);
+    return id != null;
   }
 
   static Future<SharedPreferencesService> getInstance() async {

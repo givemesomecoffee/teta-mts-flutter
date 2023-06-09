@@ -6,14 +6,17 @@ class Dependencies extends InheritedWidget {
   late final SharedPreferencesService prefsService;
   late final DatabaseService dbService;
 
-  Dependencies({super.key, required super.child, required this.prefsService}) {
-    dbService = DatabaseService(prefs: prefsService);
-  }
+  Dependencies(
+      {super.key,
+      required super.child,
+      required this.prefsService,
+      required this.dbService});
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
 
   static Dependencies of(BuildContext context) {
-    return (context.dependOnInheritedWidgetOfExactType<Dependencies>() as Dependencies);
+    return (context.dependOnInheritedWidgetOfExactType<Dependencies>()
+        as Dependencies);
   }
 }
