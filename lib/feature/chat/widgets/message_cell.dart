@@ -1,12 +1,18 @@
-import 'package:chat_app/model/message.dart';
 import 'package:flutter/material.dart';
 import 'package:string_to_hex/string_to_hex.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class MessageCell extends StatelessWidget {
-  const MessageCell({super.key, required this.message});
+  const MessageCell({
+    super.key,
+    required this.message,
+    required this.name,
+    required this.timestamp,
+  });
 
-  final Message message;
+  final String name;
+  final String message;
+  final String timestamp;
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +24,16 @@ class MessageCell extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  message.userId.substring(0, 8),
+                  name.length > 8 ? name.substring(0, 8) : name,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Color(StringToHex.toColor(
-                          StringToHex.toHexString(message.userId)))),
+                      color: Color(
+                          StringToHex.toColor(StringToHex.toHexString(name)))),
                 ),
                 const SizedBox(width: 6),
                 Text(
                   timeago.format(DateTime.fromMillisecondsSinceEpoch(
-                      int.parse(message.timestamp))),
+                      int.parse(timestamp))),
                   style: const TextStyle(
                       fontWeight: FontWeight.w400,
                       color: Colors.black38,
@@ -37,7 +43,7 @@ class MessageCell extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              message.text,
+              message,
               style: const TextStyle(fontSize: 16.0),
             ),
           ],
