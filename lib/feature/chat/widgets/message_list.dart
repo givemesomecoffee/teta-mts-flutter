@@ -1,9 +1,11 @@
+import 'package:chat_app/model/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:chat_app/feature/chat/widgets/message_cell.dart';
 
 class MessageListContent extends StatelessWidget {
   const MessageListContent({super.key, required this.messages});
-  final Stream messages;
+
+  final Stream<List<Message>> messages;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,11 @@ class MessageListContent extends StatelessWidget {
                 reverse: true,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return MessageCell(message: snapshot.data![index]);
+                  final message = snapshot.data![index];
+                  return MessageCell(
+                      message: message.text,
+                      name: message.userId,
+                      timestamp: message.timestamp);
                 }),
           );
         }
