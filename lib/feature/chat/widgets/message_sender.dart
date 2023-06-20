@@ -1,5 +1,6 @@
-import 'package:chat_app/di/service_locator.dart';
+import 'package:chat_app/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class MessageSender extends StatefulWidget {
   const MessageSender({super.key});
@@ -40,8 +41,8 @@ class _MessageSenderState extends State<MessageSender> {
           IconButton(
               onPressed: () {
                 // TODO: есть ли смысл выносить в initState сервис с бд?
-                Dependencies.of(context)
-                    .dbService
+                GetIt.instance
+                    .get<DatabaseService>()
                     .sendMessage(_controller.text);
                 _controller.text = "";
               },

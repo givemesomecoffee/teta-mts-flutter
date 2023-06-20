@@ -3,7 +3,10 @@ import 'package:chat_app/feature/settings/widget/edit_button.dart';
 import 'package:chat_app/feature/settings/widget/profile_name.dart';
 import 'package:chat_app/services/database_service.dart';
 import 'package:flutter/material.dart';
-import '../../di/service_locator.dart';
+import 'package:get_it/get_it.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import '../web_view/web_view_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -17,12 +20,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String? _avatarUrl;
   String _userName = '';
   late DatabaseService repository;
+  late WebViewController webviewController;
   bool isLoading = true;
 
   @override
-  void didChangeDependencies() {
-    repository = Dependencies.of(context).dbService;
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    repository = GetIt.instance.get<DatabaseService>();
+    webviewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+          onNavigationRequest: (NavigationRequest request) {
+            if (request.url.startsWith('https://www.youtube.com/')) {
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse('https://flutter.dev'));
     _loadUser();
   }
 
@@ -45,7 +69,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Name(
                     isEdit: _isEdit,
                     updateUserName: _updateUserName,
-                    userName: _userName)
+                    userName: _userName),
+                const SizedBox(height: 16),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const WebView(),
+                        ),
+                      );
+                    },
+                    child: const Text("webView"))
               ]),
       ),
     );
