@@ -1,3 +1,4 @@
+import 'package:chat_app/feature/chat_list/widget/chat_item.dart';
 import 'package:flutter/material.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -16,12 +17,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ),
         body: ListView(
           children: const <Widget>[
-            ListTile(
-                leading: CircleAvatar(child: Text('A')),
-                title: Text('title'),
-              subtitle: Text('subtitle'),
-              trailing: Text('31.05.2023'),
-            ),
+            ChatItem(title: 'title', subtitle: 'subtitle', date: '31.05.2023'),
             Divider(height: 8)
           ],
         ));

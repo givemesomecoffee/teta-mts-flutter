@@ -1,6 +1,7 @@
 import 'package:chat_app/feature/contacts/widget/user_list.dart';
+import 'package:chat_app/services/database_service.dart';
 import 'package:flutter/material.dart';
-import '../../di/service_locator.dart';
+import 'package:get_it/get_it.dart';
 import '../../model/user.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -14,9 +15,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
   late Stream<List<User>> users;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    users = Dependencies.of(context).dbService.trackUsers();
+  void initState() {
+    super.initState();
+    users = GetIt.instance.get<DatabaseService>().trackUsers();
   }
 
   @override
