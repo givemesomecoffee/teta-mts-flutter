@@ -9,13 +9,25 @@ class MessageSender extends StatefulWidget {
   State<MessageSender> createState() => _MessageSenderState();
 }
 
-class _MessageSenderState extends State<MessageSender> {
+class _MessageSenderState extends State<MessageSender>
+    with SingleTickerProviderStateMixin {
   late final TextEditingController _controller;
+  late AnimationController _animationController;
 
   @override
   void initState() {
     _controller = TextEditingController();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 5000),
+      vsync: this,
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,15 +50,19 @@ class _MessageSenderState extends State<MessageSender> {
               ),
             ),
           ),
-          IconButton(
-              onPressed: () {
-                // TODO: есть ли смысл выносить в initState сервис с бд?
-                GetIt.instance
-                    .get<DatabaseService>()
-                    .sendMessage(_controller.text);
-                _controller.text = "";
-              },
-              icon: const Icon(Icons.send))
+          RotationTransition(
+            turns: Tween(begin: 0.0, end: 1.0).animate(_animationController),
+            child: IconButton(
+                onPressed: () async {
+                  _animationController.repeat();
+                  await GetIt.instance
+                      .get<DatabaseService>()
+                      .sendMessage(_controller.text)
+                      .whenComplete(() =>
+                          {_animationController.reset(), _controller.text = ""});
+                },
+                icon: const Icon(Icons.send)),
+          ),
         ],
       ),
     );
