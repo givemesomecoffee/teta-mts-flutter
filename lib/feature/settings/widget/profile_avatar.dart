@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../di/service_locator.dart';
 import '../../../services/database_service.dart';
 
 class ProfileAvatar extends StatefulWidget {
@@ -20,12 +20,7 @@ class _ProfileAvatarState extends State<ProfileAvatar> {
   void initState() {
     _avatarUrl = widget.imageUrl;
     super.initState();
-  }
-
-  @override
-  didChangeDependencies() {
-    repository = Dependencies.of(context).dbService;
-    super.didChangeDependencies();
+    repository = GetIt.instance.get<DatabaseService>();
   }
 
   @override

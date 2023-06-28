@@ -72,7 +72,7 @@ class DatabaseService {
   }
 
   Future saveNewUser() async {
-    if (prefs.checkIfUserAuthorized()) {
+    if (!prefs.checkIfUserAuthorized()) {
       final id = await prefs.getId();
       final dbRef = FirebaseDatabase.instance.ref(_usersTable);
       final user = User(userId: id, photoUrl: null, displayName: null);

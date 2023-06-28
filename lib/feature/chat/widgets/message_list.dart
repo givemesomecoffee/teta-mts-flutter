@@ -20,7 +20,6 @@ class MessageListContent extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: ListView.builder(
-                reverse: true,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   final message = snapshot.data![index];
