@@ -17,12 +17,14 @@ class MessageCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
+        key: const ValueKey('MessagePlaceholder'),
         padding: const EdgeInsets.only(top: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
+
                 Text(
                   name.length > 8 ? name.substring(0, 8) : name,
                   style: TextStyle(
@@ -49,4 +51,6 @@ class MessageCell extends StatelessWidget {
           ],
         ));
   }
+
+
 }

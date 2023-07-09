@@ -21,7 +21,9 @@ class _ChatScreenState extends State<ChatScreen> {
           title: Text(widget.title),
         ),
         body: MessageListContent(
-            messages: GetIt.instance.get<DatabaseService>().trackMessages()),
+            messages:
+            GetIt.instance.get<DatabaseService>().trackMessages()
+        ),
         bottomNavigationBar: const MessageSender());
   }
 }
