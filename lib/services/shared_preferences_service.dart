@@ -17,11 +17,6 @@ class SharedPreferencesService {
     return id;
   }
 
-  bool checkIfUserAuthorized() {
-    final id = prefs.getString(_uuid);
-    return id != null;
-  }
-
   static Future<SharedPreferencesService> getInstance() async {
     return SharedPreferencesService(
         prefs: await SharedPreferences.getInstance());

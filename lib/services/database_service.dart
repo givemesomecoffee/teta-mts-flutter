@@ -5,7 +5,7 @@ import 'package:chat_app/services/shared_preferences_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import '../model/user.dart';
 
 class DatabaseService {
@@ -16,7 +16,7 @@ class DatabaseService {
   final SharedPreferencesService prefs;
 
   Future sendMessage(text) async {
-    final id = await prefs.getId();
+    final id = (await getUser()).userId;
     DatabaseReference ref = FirebaseDatabase.instance.ref(_messagesTable);
     final message = Message(
         userId: id,
@@ -55,7 +55,7 @@ class DatabaseService {
         FirebaseStorage.instance.ref().child("images").child(image.name);
     await ref.putFile(imageFile);
     final downLoadUrl = await ref.getDownloadURL();
-    var id = await prefs.getId();
+    final id = (await getUser()).userId;
     final dbRef =
         FirebaseDatabase.instance.ref(_usersTable).child(id).child('photoUrl');
     dbRef.set(downLoadUrl);
@@ -63,7 +63,7 @@ class DatabaseService {
   }
 
   Future updateName(String text) async {
-    var id = await prefs.getId();
+    final id = (await getUser()).userId;
     final dbRef = FirebaseDatabase.instance
         .ref(_usersTable)
         .child(id)
@@ -72,18 +72,18 @@ class DatabaseService {
   }
 
   Future saveNewUser() async {
-    if (!prefs.checkIfUserAuthorized()) {
-      final id = await prefs.getId();
-      final dbRef = FirebaseDatabase.instance.ref(_usersTable);
-      final user = User(userId: id, photoUrl: null, displayName: null);
-      final test = dbRef.child(id);
-      test.set(user.toJson());
-    }
+     addOrUpdateUser(await getUser());
   }
 
-  Future<User?> getUser() async {
-    var id = await prefs.getId();
-    final dbRef = FirebaseDatabase.instance.ref(_usersTable).child(id);
+  Future addOrUpdateUser(User user) async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/${user.userId}");
+    await ref.set(user.toJson());
+  }
+
+  Future<User> getUser() async {
+    var id = FirebaseAuth.instance.currentUser?.uid;
+    final dbRef = FirebaseDatabase.instance.ref(_usersTable).child(id!);
     final user = await dbRef.get();
     if (user.value != null) {
       final msg =
