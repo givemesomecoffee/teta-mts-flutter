@@ -1,6 +1,7 @@
 import 'package:chat_app/feature/root/root_container.dart';
 import 'package:chat_app/services/database_service.dart';
-import 'package:chat_app/services/shared_preferences_service.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
@@ -11,8 +12,8 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _initServiceLocator();
   await _initFirebase();
+  await _initServiceLocator();
   _registerUserIfNeeded();
   runApp(const MyApp());
 }
@@ -81,12 +82,10 @@ Future _initFirebase() async {
 
 Future _initServiceLocator() async {
   final getIt = GetIt.instance;
-  final prefs = await SharedPreferencesService.getInstance();
-  final db = DatabaseService(prefs: prefs);
-  getIt.registerSingleton<SharedPreferencesService>(prefs);
+  final db = DatabaseService(db: FirebaseDatabase.instance, storage: FirebaseStorage.instance);
   getIt.registerSingleton<DatabaseService>(db);
 }
 
 void _registerUserIfNeeded() {
-  GetIt.instance.get<DatabaseService>().saveNewUser();
+  GetIt.instance.get<DatabaseService>().addOrUpdateUser();
 }
