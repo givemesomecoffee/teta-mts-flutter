@@ -5,22 +5,16 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:chat_app/services/database_service.dart';
-import 'package:chat_app/services/shared_preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:chat_app/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    final prefs = SharedPreferencesService(
-        prefs: await SharedPreferences.getInstance());
-    await tester.pumpWidget(MyApp(
-        prefsService: prefs, databaseService: DatabaseService(prefs: prefs),));
+    await tester.pumpWidget(const MyApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

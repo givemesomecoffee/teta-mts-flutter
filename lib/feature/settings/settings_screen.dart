@@ -5,7 +5,7 @@ import 'package:chat_app/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:firebase_auth/firebase_auth.dart' hide PhoneAuthProvider;
 import '../web_view/web_view_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -79,7 +79,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       );
                     },
-                    child: const Text("webView"))
+                    child: const Text("webView")),
+                const SizedBox(height: 16),
+                GestureDetector(
+                    onTap: _signOut,
+                    child: const Text("Sign out"))
               ]),
       ),
     );
@@ -107,5 +111,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }
       isLoading = false;
     });
+  }
+
+  Future<void> _signOut() async{
+    FirebaseAuth.instance.signOut();
+    Navigator.pushNamed(context, '/sign-in');
   }
 }
