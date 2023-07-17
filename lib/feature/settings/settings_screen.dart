@@ -3,9 +3,13 @@ import 'package:chat_app/feature/settings/widget/edit_button.dart';
 import 'package:chat_app/feature/settings/widget/profile_name.dart';
 import 'package:chat_app/services/database_service.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_it/get_it.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide PhoneAuthProvider;
+import '../utils/get_current_position.dart';
+import 'map_screen.dart';
 import '../web_view/web_view_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -19,6 +23,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _isEdit = false;
   String? _avatarUrl;
   String _userName = '';
+  Position? position;
   late DatabaseService repository;
   late WebViewController webviewController;
   bool isLoading = true;
@@ -81,9 +86,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                     child: const Text("webView")),
                 const SizedBox(height: 16),
-                GestureDetector(
-                    onTap: _signOut,
-                    child: const Text("Sign out"))
+                GestureDetector(onTap: _onGeoTap, child: const Text("map")),
+                const SizedBox(height: 16),
+                GestureDetector(onTap: _signOut, child: const Text("Sign out")),
+
               ]),
       ),
     );
@@ -102,10 +108,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  void _onGeoTap() async{
+  await determinePosition().then((value) =>
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => MapScreen(position: LatLng(value.latitude, value.longitude)),
+        ),
+      )
+  );
+
+  }
+
   void _loadUser() async {
     final user = await repository.getUser();
     setState(() {
-      _userName = user?.displayName != null ? user!.displayName! : user!.userId;
+      _userName = user.displayName != null ? user.displayName! : user.userId;
       if (user.photoUrl != null) {
         _avatarUrl = user.photoUrl!;
       }
@@ -113,7 +130,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  Future<void> _signOut() async{
+  Future<void> _signOut() async {
     FirebaseAuth.instance.signOut();
     Navigator.pushNamed(context, '/sign-in');
   }
