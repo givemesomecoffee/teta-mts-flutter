@@ -1,6 +1,7 @@
 import 'package:chat_app/feature/root/root_container.dart';
 import 'package:chat_app/services/database_service.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -76,8 +77,16 @@ Future _initFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseUIAuth.configureProviders([
-  PhoneAuthProvider()]);
+  FirebaseUIAuth.configureProviders([PhoneAuthProvider()]);
+  FirebaseMessaging fm = FirebaseMessaging.instance;
+  NotificationSettings settings = await fm.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true
+  );
+
+  print(await fm.getToken());
+
 }
 
 Future _initServiceLocator() async {
