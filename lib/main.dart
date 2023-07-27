@@ -1,11 +1,15 @@
 import 'package:chat_app/feature/root/root_container.dart';
 import 'package:chat_app/services/database_service.dart';
+import 'package:chat_app/services/local_database_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'data/local/db_user.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide PhoneAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -76,13 +80,17 @@ Future _initFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseUIAuth.configureProviders([
-  PhoneAuthProvider()]);
+  FirebaseUIAuth.configureProviders([PhoneAuthProvider()]);
 }
 
 Future _initServiceLocator() async {
   final getIt = GetIt.instance;
-  final db = DatabaseService(db: FirebaseDatabase.instance, storage: FirebaseStorage.instance);
+  final dir = await getApplicationDocumentsDirectory();
+  final isar = await Isar.open(
+  [DbUserSchema],
+  directory: dir.path,
+  );
+  final db = DatabaseService(localDatabase: LocalDatabaseService(isar: isar), db: FirebaseDatabase.instance, storage: FirebaseStorage.instance);
   getIt.registerSingleton<DatabaseService>(db);
 }
 

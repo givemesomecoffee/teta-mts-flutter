@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:chat_app/model/message.dart';
+import 'package:chat_app/services/local_database_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,10 +9,11 @@ import 'package:firebase_auth/firebase_auth.dart' hide User;
 import '../model/user.dart';
 
 class DatabaseService {
-  DatabaseService({required this.db, required this.storage});
+  DatabaseService( {required this.localDatabase, required this.db, required this.storage});
 
   final _messagesTable = 'messages';
   final _usersTable = 'users';
+  final LocalDatabaseService localDatabase;
   final FirebaseDatabase db;
   final FirebaseStorage storage;
 
@@ -96,6 +98,7 @@ class DatabaseService {
             final current = Map<String, dynamic>.from(value);
             messageList.add(User.fromMap(current));
           });
+          localDatabase.addUsers(messageList);
           sink.add(messageList);
         } else {
           sink.add(List.empty());
