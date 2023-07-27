@@ -43,10 +43,20 @@ class _RootContainerState extends State<RootContainer> {
     );
   }
 
+  void _initializeNotifications() async{
+    FirebaseMessaging fm = FirebaseMessaging.instance;
+    await fm.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true
+    );
+    print(await fm.getToken());
+  }
+
   @override
   void initState() {
     super.initState();
-
+    _initializeNotifications();
     // Run code required to handle interacted messages in an async function
     // as initState() must not be async
     setupInteractedMessage();
