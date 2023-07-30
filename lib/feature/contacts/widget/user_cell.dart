@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/user.dart';
+import '../../utils/user.dart';
 
 class UserCell extends StatelessWidget {
   const UserCell({super.key, required this.user});
@@ -16,6 +16,6 @@ class UserCell extends StatelessWidget {
               user.photoUrl != null ? NetworkImage(user.photoUrl!) : null,
         ),
         title:
-            Text(user.displayName != null ? user.displayName! : user.userId));
+            Text(getUserName(user)));
   }
 }

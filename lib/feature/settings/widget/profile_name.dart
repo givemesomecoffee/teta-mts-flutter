@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
+import '../../../services/database_service.dart';
+import '../../../services/service_providers.dart';
+import '../settings_screen.dart';
 
-class Name extends StatelessWidget {
-  const Name(
-      {super.key,
-      required this.isEdit,
-      required this.updateUserName,
-      required this.userName});
+class Name extends ConsumerWidget {
+  const Name({super.key, required this.userName});
 
-  final bool isEdit;
   final String userName;
-  final ValueChanged<String> updateUserName;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isEdit = ref.watch(isProfileEdit);
     return isEdit
         ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 64),
             child: TextField(
               onSubmitted: (text) {
-                updateUserName(text);
+                _updateUserName(text, ref);
               },
             ),
           )
@@ -26,5 +26,10 @@ class Name extends StatelessWidget {
             userName,
             style: const TextStyle(fontSize: 24),
           );
+  }
+
+  void _updateUserName(String text, WidgetRef ref) async {
+    await GetIt.instance.get<DatabaseService>().updateName(text);
+    ref.invalidate(profileProvider);
   }
 }

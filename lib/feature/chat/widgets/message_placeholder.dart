@@ -7,7 +7,6 @@ class MessagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      key: const ValueKey('MessagePlaceholder'),
         padding: const EdgeInsets.only(top: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
