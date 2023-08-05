@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:news/data/news_service.dart';
 import 'features/root/root_container.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  await _initServiceLocator();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -19,4 +23,9 @@ class MyApp extends StatelessWidget {
           home: const RootContainer(),
         );
   }
+}
+
+Future _initServiceLocator() async {
+  final getIt = GetIt.instance;
+  getIt.registerSingleton<NewsService>(NewsService());
 }

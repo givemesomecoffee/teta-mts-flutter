@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../news/news_screen.dart';
+import '../search/search_screen.dart';
 
 class RootContainer extends StatefulWidget {
   const RootContainer({Key? key}) : super(key: key);
@@ -15,6 +17,8 @@ class _RootContainerState extends State<RootContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: <Widget>[
+        const NewsScreen(),
+        const SearchScreen()
       ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
