@@ -28,12 +28,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         loading: () => const Text("loading"),
         data: (data) {
           if (data != null) {
-           return Expanded(child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return NewsCell(newsItemData: data[index]);
-                }));
-          } else {
+            if(data.isEmpty){
+              return const Text("По вашему запросу ничего не найдено");
+            } else {
+              return Expanded(child: ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return NewsCell(newsItemData: data[index]);
+                  }));
+            }} else {
             return const Text("Начните поиск");
           }
         })
