@@ -1,42 +1,27 @@
 import 'package:chat_app/feature/contacts/widget/user_list.dart';
-import 'package:chat_app/services/database_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import '../../model/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../services/service_providers.dart';
 
-class ContactsScreen extends StatefulWidget {
+class ContactsScreen extends ConsumerWidget {
   const ContactsScreen({Key? key}) : super(key: key);
 
   @override
-  State<ContactsScreen> createState() => _ContactsScreenState();
-}
-
-class _ContactsScreenState extends State<ContactsScreen> {
-  late Stream<List<User>> users;
-
-  @override
-  void initState() {
-    super.initState();
-    users = GetIt.instance.get<DatabaseService>().trackUsers();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Contacts"),
-        ),
-        body: StreamBuilder(
-          stream: users,
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return const Text("loading");
-            } else if (snapshot.data?.isEmpty == true) {
-              return const Text("no users");
-            } else {
-              return UserListContent(users: snapshot.data!);
-            }
-          },
-        ));
+      appBar: AppBar(
+        title: const Text("Contacts"),
+      ),
+      body: ref.watch(usersProvider).when(
+        loading: () {
+          return const Text("loading");
+        },
+        error: (err, stack) => Text('Error: $err'),
+        data: (users) {
+         return users.isEmpty
+              ? const Text("no users")
+              : UserListContent(users: users);
+        },
+    ));
   }
 }

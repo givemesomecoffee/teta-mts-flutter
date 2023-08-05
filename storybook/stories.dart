@@ -47,16 +47,12 @@ class MyApp extends StatelessWidget {
                 name: 'Screens/Settings/Name',
                 builder: (context) => SafeArea(
                         child: Name(
-                      isEdit: context.knobs.boolean(label: 'isEdit'),
-                      updateUserName: (String value) {},
                       userName: context.knobs.text(label: 'name'),
                     ))),
             Story(
                 name: 'Screens/Settings/EditButton',
-                builder: (context) => SafeArea(
-                      child: ToggleEditButton(
-                          isEdit: context.knobs.boolean(label: 'isEditMode'),
-                          callback: (bool value) {}),
+                builder: (context) => const SafeArea(
+                      child: ToggleEditButton(),
                     )),
             Story(
                 name: 'Screens/Contacts/UserList',
