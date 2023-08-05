@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news/features/search/search_news_provider.dart';
 import 'package:news/features/search/search_widget.dart';
 
+import '../../toggle_theme_widget.dart';
 import '../news/news_cell.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Search"),
+          actions: const [ToggleThemeWidget()],
         ),
         body: Column(
           children: [
