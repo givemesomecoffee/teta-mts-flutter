@@ -25,25 +25,26 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         body: Column(
           children: [
             const SearchWidget(),
-        ref.watch(searchNewsProvider).when(
-        error: (e, tr) => const Text("Начните поиск"),
-        loading: () => const Text("loading"),
-        data: (data) {
-          if (data != null) {
-            if(data.isEmpty){
-              return const Text("По вашему запросу ничего не найдено");
-            } else {
-              return Expanded(child: ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return NewsCell(newsItemData: data[index]);
-                  }));
-            }} else {
-            return const Text("Начните поиск");
-          }
-        })
+            ref.watch(searchNewsProvider).when(
+                error: (e, tr) => const Text("Начните поиск"),
+                loading: () => const Expanded(child: Center(child: CircularProgressIndicator())),
+                data: (data) {
+                  if (data != null) {
+                    if (data.isEmpty) {
+                      return const Text("По вашему запросу ничего не найдено");
+                    } else {
+                      return Expanded(
+                          child: ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return NewsCell(newsItemData: data[index]);
+                              }));
+                    }
+                  } else {
+                    return const Expanded(child: Center( child: Text("Начните поиск")));
+                  }
+                })
           ],
-        )
-    );
+        ));
   }
 }

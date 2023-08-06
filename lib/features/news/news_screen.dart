@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news/features/news/news_cell.dart';
 import 'package:news/features/news/news_provider.dart';
 
+import '../../toggle_theme_widget.dart';
+
 class NewsScreen extends ConsumerStatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
 
@@ -15,23 +17,29 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("News"),
+          actions: const [ToggleThemeWidget()],
         ),
-        body:RefreshIndicator(
-    onRefresh: _pullRefresh,
-    child: ref.watch(newsProvider).when(error: (e, tr) => const Placeholder() , loading: () => const Placeholder(),
-    data: (data){
-      return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return NewsCell(newsItemData: data[index]);
-          });
-    })));
+        body: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            child: ref.watch(newsProvider).when(
+                error: (e, tr) =>
+                    const Center(
+                        child: Text("Не удалось загрузить новости.")),
+                loading: () =>
+                    const Center(child: CircularProgressIndicator()),
+                data: (data) {
+                  return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return NewsCell(newsItemData: data[index]);
+                      });
+                })));
   }
 
-  Future _pullRefresh() async{
-   ref.refresh(newsProvider);
+  Future _pullRefresh() async {
+    ref.refresh(newsProvider);
   }
 }

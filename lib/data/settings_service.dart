@@ -15,5 +15,4 @@ class SettingsService{
   Future toggleTheme() async{
     await prefs.setBool(_isDarkMode, !(await isDark()));
   }
-
 }

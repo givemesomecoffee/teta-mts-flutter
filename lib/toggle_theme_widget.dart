@@ -17,7 +17,7 @@ class ToggleThemeWidget extends ConsumerWidget {
   }
 
   Future _toggleTheme(WidgetRef ref) async{
-    GetIt.instance.get<SettingsService>().toggleTheme();
+    await GetIt.instance.get<SettingsService>().toggleTheme();
     ref.refresh(isDarkModeProvider);
   }
 }
