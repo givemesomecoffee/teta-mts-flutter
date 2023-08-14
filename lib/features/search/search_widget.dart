@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news/features/search/filter_provider.dart';
@@ -28,7 +27,9 @@ class _SearchWidgetState extends ConsumerState<SearchWidget> {
         child: Row(
           children: [
             const Center(child: Icon(Icons.search)),
-            Container(width: 10,),
+            Container(
+              width: 10,
+            ),
             Expanded(
               child: TextField(
                 controller: _controller,
