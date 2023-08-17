@@ -19,7 +19,7 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("News"),
+          title: const Text("Новости"),
           actions: const [ToggleThemeWidget()],
         ),
         body: RefreshIndicator(

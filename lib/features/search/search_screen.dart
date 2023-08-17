@@ -19,7 +19,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Search"),
+          title: const Text("Поиск"),
           actions: const [ToggleThemeWidget()],
         ),
         body: Column(

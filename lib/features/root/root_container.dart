@@ -36,11 +36,11 @@ class _RootContainerState extends State<RootContainer> {
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.newspaper),
-            label: 'News',
+            label: 'Новости',
           ),
           NavigationDestination(
             icon: Icon(Icons.search),
-            label: 'Search',
+            label: 'Поиск',
           ),
         ],
       ),
