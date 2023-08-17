@@ -9,7 +9,7 @@ class NewsService {
     final response = await dio.get("${_HOST}r/flutterdev/new.json");
     final result = NewsResponse.fromJson(response.data);
     print(result);
-    return result.data.children.map((e) => e.data).toList();
+    return result.data.children.map((e) => e.data).toList().sublist(0,15);
   }
 
   Future<List<NewsItemData>> searchNews(String filter) async {
