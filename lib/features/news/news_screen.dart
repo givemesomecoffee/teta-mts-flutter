@@ -25,11 +25,18 @@ class _NewsScreenState extends ConsumerState<NewsScreen> {
         body: RefreshIndicator(
             onRefresh: _pullRefresh,
             child: ref.watch(newsProvider).when(
-                error: (e, tr) =>
-                    const Center(
-                        child: Text("Не удалось загрузить новости.")),
-                loading: () =>
-                    const Center(child: CircularProgressIndicator()),
+                error: (e, tr) => SafeArea(
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Не удалось загрузить новости."),
+                              TextButton(
+                                  onPressed: _pullRefresh,
+                                  child: const Text("Обновить"))
+                            ]))),
+                loading: () => const Center(child: CircularProgressIndicator()),
                 data: (data) {
                   return ListView.builder(
                       itemCount: data.length,
